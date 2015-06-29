@@ -8,6 +8,15 @@ Description.
 __author__ = 'ZJlblDEHb'
 
 
+import logging
+
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)-15s - %(levelname)s: %(message)s"
+)
+
+
 SQLALCHEMY_DATABASE_URI = ""
 
 
