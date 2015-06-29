@@ -17,7 +17,10 @@ logging.basicConfig(
 )
 
 
-SQLALCHEMY_DATABASE_URI = ""
+SQLALCHEMY_DATABASE_URI = "sqlite+pysqlite:///database.db"
 
 
 DATETIME_FORMAT = "%Y%m%dT%H:%M:%S"
+
+
+APPLICATION_ROOT = "/v1"

@@ -12,10 +12,10 @@ import logging
 from httplib import OK, CREATED,  NOT_FOUND, BAD_REQUEST, INTERNAL_SERVER_ERROR
 from flask import request
 from flask.ext.restful import Resource
-from decorators import validate, JSON_INPUT, QUERY_INPUT
-from database import session_wrapper
-from models import TaskModel
-from tools import form_output
+from backend.api.decorators import validate, JSON_INPUT, QUERY_INPUT
+from backend.api.database import session_wrapper
+from backend.api.models import TaskModel
+from backend.api.tools import form_output
 
 
 logger = logging.getLogger(__name__)
@@ -71,7 +71,7 @@ class TaskList(TaskBase):
                 query = query.limit(limit)
 
             if offset is not None:
-                offset = query.offset(offset)
+                query = query.offset(offset)
 
             tasks = query.all()
 
