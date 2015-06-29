@@ -6,6 +6,3 @@ Description.
 """
 
 __author__ = 'asergeev'
-
-
-from tasks import Task, TaskList

@@ -86,9 +86,9 @@ class ValidateDecorator(object):
             logger.debug("Got request in validate decorator.")
             result = {}
             source_dict = self.get_source_dict()
-            logger.debug("Input params are = ", str(source_dict))
+            logger.debug("Input params are = %s", str(source_dict))
             source_keys = set(source_dict.keys())
-            logger.debug("Source keys are = ", str(source_keys))
+            logger.debug("Source keys are = %s", str(source_keys))
 
             for mandatory_key in self.mandatory_keys:
                 if mandatory_key not in source_keys:

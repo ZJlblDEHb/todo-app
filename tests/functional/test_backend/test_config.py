@@ -8,8 +8,4 @@ Description.
 __author__ = 'ZJlblDEHb'
 
 
-from main import app
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+SQLALCHEMY_DATABASE_URI = 'sqlite://'

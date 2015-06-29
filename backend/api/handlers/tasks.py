@@ -30,6 +30,8 @@ class TaskList(TaskBase):
     Contains handlers for task entities.
     """
 
+    logger.debug("wtf?")
+
     @validate(
         request=request,
         optional=(
