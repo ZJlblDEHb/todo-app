@@ -9,7 +9,12 @@ Description.
 __author__ = 'ZJlblDEHb'
 
 
+import logging
+import simplejson as json
 from httplib import BAD_REQUEST
+
+
+logger = logging.getLogger(__name__)
 
 
 QUERY_INPUT = 1
@@ -19,6 +24,7 @@ JSON_INPUT = 2
 CAST_TABLE = {
     int: lambda x: int(x),
     str: lambda x: str(x),
+    bool: lambda x: bool(json.loads(x)) if isinstance(x, basestring) else bool(x),
     (tuple, list): lambda x: list(x)
 }
 
@@ -42,6 +48,7 @@ class ValidateField(object):
                 return self.cast_func(value)
 
             except (ValueError, TypeError) as e:
+                logger.exception(e)
                 raise ValidateError("Can't cast value to '%s' type!" % str(self.field_type))
 
         else:
@@ -76,13 +83,18 @@ class ValidateDecorator(object):
 
         def tmp(instance, *args, **kwargs):
 
+            logger.debug("Got request in validate decorator.")
             result = {}
             source_dict = self.get_source_dict()
+            logger.debug("Input params are = %s", str(source_dict))
             source_keys = set(source_dict.keys())
+            logger.debug("Source keys are = %s", str(source_keys))
 
             for mandatory_key in self.mandatory_keys:
                 if mandatory_key not in source_keys:
-                    return "Mandatory key '%s' not found!" % mandatory_key, BAD_REQUEST
+                    output = "Mandatory key '%s' not found!" % mandatory_key
+                    logger.debug(output)
+                    return output, BAD_REQUEST
 
             for source_key, source_value in source_dict.iteritems():
                 if source_key in self.summary_keys:
@@ -91,13 +103,18 @@ class ValidateDecorator(object):
                             result[source_key] = self.fields[source_key].cast_value(source_value)
 
                         except ValidateError as e:
-                            return "Key '%s' has non-convertible value to type '%s'" % (source_key, str(self.fields[source_key].field_type))
+                            logger.exception(e)
+                            output = "Key '%s' has non-convertible value to type '%s'" % (source_key, str(self.fields[source_key].field_type))
+                            logger.debug(output)
+                            return output, BAD_REQUEST
 
                     else:
                         result[source_key] = None
 
                 else:
-                    return "Unknown key '%s'!" % source_key, BAD_REQUEST
+                    output = "Unknown key '%s'!" % source_key
+                    logger.debug(output)
+                    return output, BAD_REQUEST
 
             return func(instance, result, *args, **kwargs)
 
