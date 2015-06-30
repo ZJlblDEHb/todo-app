@@ -5,7 +5,7 @@
 Description.
 """
 
-__author__ = 'asergeev'
+__author__ = 'ZJlblDEHb'
 
 
 from tasks import Task, TaskList

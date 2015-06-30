@@ -118,7 +118,7 @@ class Task(TaskBase):
     """
 
     @validate(request=request)
-    def get(self, id):
+    def get(self, fields, id):
         """
         :param id:
         :return:
@@ -167,3 +167,20 @@ class Task(TaskBase):
             session.flush()
 
             return form_output(task, self._fields), OK
+
+    @validate(request=request)
+    def delete(self, fields, id):
+        """
+        :param id:
+        :return:
+        """
+        with session_wrapper() as session:
+            task = session.query(TaskModel).get(id)
+
+            if task is None:
+                return "", NOT_FOUND
+
+            session.delete(task)
+            session.flush()
+
+            return "", OK
